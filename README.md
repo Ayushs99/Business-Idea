@@ -1,1 +1,1 @@
-# Business-Idea
+# Thanks For Registration
