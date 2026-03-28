@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Tribe | Event Registration</title>
+    <style>
+        /* Base Reset & Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Animated Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(229, 9, 20, 0.6);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 350px;
+            height: 350px;
+            background: rgba(140, 0, 10, 0.5);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Glassmorphism Container */
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Brand Headings */
+        .brand-logo {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+        }
+        .brand-logo span {
+            color: #e50914;
+        }
+        .brand-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Form Elements - Floating Labels */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-group label {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus, 
+        .input-group input:valid {
+            border-bottom-color: #e50914;
+        }
+        .input-group input:focus ~ label, 
+        .input-group input:valid ~ label {
+            top: -12px;
+            font-size: 12px;
+            color: #e50914;
+            font-weight: bold;
+        }
+
+        /* Advanced Checkbox Grid */
+        .events-title {
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .event-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        /* Custom Checkbox Active State */
+        .event-card input:checked ~ .card-content {
+            color: #fff;
+        }
+        .event-card:has(input:checked) {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.15);
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.3);
+        }
+        .card-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-align: center;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #e50914, #b0060e);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.6);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Success Message Area */
+        #success-area {
+            display: none;
+            text-align: center;
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .check-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(229, 9, 20, 0.2);
+            border: 2px solid #e50914;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #e50914;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+        }
+        .success-heading {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .token-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(229, 9, 20, 0.5);
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.8);
+        }
+        .success-text {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-panel">
+        
+        <div id="form-area">
+            <div class="brand-logo">FIT <span>TRIBE</span></div>
+            <div class="brand-subtitle">Event Registration</div>
+
+            <form id="gym-registration">
+                
+                <div class="input-group">
+                    <input type="text" id="name" required autocomplete="off">
+                    <label for="name">Full Name</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="email" required autocomplete="off">
+                    <label for="email">Email Address</label>
+                </div>
+
+                <div class="events-title">Select Your Events</div>
+                <div class="checkbox-grid">
+                    <label class="event-card">
+                        <input type="checkbox" name="event" value="Arm Wrestling">
+                        <div class="card-content">Arm Wrestling</div>
+                    </label>
+                    <label class="event-card">
+                        <input type="checkbox" name="event" value="Push Ups">
+                        <div class="card-content">Push Ups</div>
+                    </label>
+                    <label class="event-card">
+                        <input type="checkbox" name="event" value="Squats">
+                        <div class="card-content">Squats</div>
+                    </label>
+                    <label class="event-card">
+                        <input type="checkbox" name="event" value="Dumbbell">
+                        <div class="card-content">Dumbbell</div>
+                    </label>
+                </div>
+
+                <button type="submit">Secure My Spot</button>
+            </form>
+        </div>
+
+        <div id="success-area">
+            <div class="check-circle">✓</div>
+            <h2 class="success-heading">Welcome to the Tribe</h2>
+            <p class="success-text">Your registration is confirmed. Keep your token safe, you will need it at the entrance.</p>
+            <div class="token-display" id="token-output"></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('gym-registration').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            // Validation: Check if at least one event is selected
+            const checkboxes = document.querySelectorAll('input[name="event"]:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one event to register.');
+                return;
+            }
+
+            // Token Logic (1 to 100)
+            let lastToken = parseInt(localStorage.getItem('gymTokenLimit')) || 0;
+            
+            if (lastToken >= 100) {
+                alert('Registration Closed! All 100 spots are filled.');
+                return;
+            }
+
+            let currentToken = lastToken + 1;
+            localStorage.setItem('gymTokenLimit', currentToken);
+
+            // Format token specifically as requested
+            let formattedToken = 'NO. ' + currentToken;
+
+            // Trigger Transition Animations
+            const formArea = document.getElementById('form-area');
+            const successArea = document.getElementById('success-area');
+            
+            // Fade out form
+            formArea.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+            formArea.style.opacity = "0";
+            formArea.style.transform = "scale(0.95)";
+            
+            setTimeout(() => {
+                formArea.style.display = 'none';
+                successArea.style.display = 'block';
+                document.getElementById('token-output').innerText = formattedToken;
+            }, 400); // Wait for fade out to finish
+        });
+    </script>
+
+</body>
+</html>
